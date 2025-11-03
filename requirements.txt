@@ -1,0 +1,5 @@
+pandas>=2.0.0
+numpy>=1.24.0
+requests>=2.0.0
+beautifulsoup4>=4.0.0
+python-whois>=0.7
