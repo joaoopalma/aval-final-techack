@@ -8,7 +8,13 @@ Endpoints:
 """
 
 import os
+import sys
 from flask import Flask, request, redirect, send_file, abort, render_template_string, url_for
+
+# Get the project root directory (parent of src/)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOGS_DIR = os.path.join(PROJECT_ROOT, 'logs')
+REPORTS_DIR = PROJECT_ROOT  # Reports are saved in project root
 
 app = Flask(__name__)
 
@@ -37,36 +43,40 @@ INDEX_HTML = """
 
 
 def ensure_dirs():
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('reports', exist_ok=True)
+    os.makedirs(LOGS_DIR, exist_ok=True)
+    os.makedirs(REPORTS_DIR, exist_ok=True)
 
 
 @app.route('/', methods=['GET'])
 def index():
     # If HTML report exists, serve it
-    if os.path.exists('threat_report.html'):
-        return send_file('threat_report.html')
+    html_report = os.path.join(REPORTS_DIR, 'threat_report.html')
+    if os.path.exists(html_report):
+        return send_file(html_report)
     return render_template_string(INDEX_HTML)
 
 
 @app.route('/report.html')
 def report_html():
-    if os.path.exists('threat_report.html'):
-        return send_file('threat_report.html')
+    html_report = os.path.join(REPORTS_DIR, 'threat_report.html')
+    if os.path.exists(html_report):
+        return send_file(html_report)
     return redirect(url_for('index'))
 
 
 @app.route('/report.json')
 def report_json():
-    if os.path.exists('threat_report.json'):
-        return send_file('threat_report.json')
+    json_report = os.path.join(REPORTS_DIR, 'threat_report.json')
+    if os.path.exists(json_report):
+        return send_file(json_report)
     abort(404)
 
 
 @app.route('/processed.csv')
 def processed_csv():
-    if os.path.exists('processed_logs.csv'):
-        return send_file('processed_logs.csv')
+    csv_file = os.path.join(REPORTS_DIR, 'processed_logs.csv')
+    if os.path.exists(csv_file):
+        return send_file(csv_file)
     abort(404)
 
 
@@ -81,11 +91,14 @@ def upload_and_process():
     if f.filename == '':
         return 'Arquivo inválido', 400
 
-    upload_path = os.path.join('logs', 'uploaded.log')
+    upload_path = os.path.join(LOGS_DIR, 'uploaded.log')
     f.save(upload_path)
 
     # Run pipeline programmatically
     try:
+        # Add parent directory to path to allow imports
+        sys.path.insert(0, PROJECT_ROOT)
+        
         from src.scanner import LogScanner
         from src.utils.preprocessor import DataPreprocessor
         from src.report_generator import ReportGenerator
@@ -99,13 +112,15 @@ def upload_and_process():
         cleaned = pre.clean_all()
 
         gen = ReportGenerator(cleaned)
-        gen.generate_json_report('threat_report.json')
-        gen.generate_html_report('threat_report.html')
+        gen.generate_json_report(os.path.join(REPORTS_DIR, 'threat_report.json'))
+        gen.generate_html_report(os.path.join(REPORTS_DIR, 'threat_report.html'))
 
-        cleaned.to_csv('processed_logs.csv', index=False)
+        cleaned.to_csv(os.path.join(REPORTS_DIR, 'processed_logs.csv'), index=False)
 
     except Exception as e:
-        return f'Erro ao processar logs: {e}', 500
+        import traceback
+        error_detail = traceback.format_exc()
+        return f'Erro ao processar logs: {e}<br><pre>{error_detail}</pre>', 500
 
     return redirect(url_for('report_html'))
 

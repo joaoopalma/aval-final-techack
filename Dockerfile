@@ -18,6 +18,7 @@ RUN mkdir -p /app/logs /app/reports
 
 # Variáveis de ambiente
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 # Expor porta do servidor web
 EXPOSE 8080

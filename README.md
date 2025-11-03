@@ -1,16 +1,16 @@
-# 🛡️ Sistema de Detecção de Ameaças Cibernéticas em Servidores Web
+# Sistema de Detecção de Ameaças Cibernéticas em Servidores Web
 
 Sistema desenvolvido para identificar e classificar ameaças cibernéticas em servidores web através da análise de logs de acesso.
 
-## 📋 Descrição
+## Descrição
 
 Este projeto implementa um sistema completo de detecção de ameaças que:
-- ✅ Coleta logs detalhados de acesso ao servidor web
-- ✅ Realiza pré-processamento e limpeza de dados
-- ✅ Identifica padrões potencialmente suspeitos
-- ✅ Gera relatórios detalhados de segurança
+- Coleta logs detalhados de acesso ao servidor web
+- Realiza pré-processamento e limpeza de dados
+- Identifica padrões potencialmente suspeitos
+- Gera relatórios detalhados de segurança
 
-## 🏗️ Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 aval-final-techack/
@@ -32,7 +32,7 @@ aval-final-techack/
 └── README.md
 ```
 
-## 🚀 Instalação
+## Instalação
 
 ### Requisitos
 - Python 3.11+
@@ -60,9 +60,6 @@ docker run -p 8080:8080 threat-detection-system
 
 # Acesse no navegador: http://localhost:8080
 ```
-
-> 📖 **Guia Completo**: Veja [QUICK_START.md](QUICK_START.md) ou [DOCKER_GUIDE.md](DOCKER_GUIDE.md)
-
 ---
 
 ## 🌐 Servidor Web
@@ -79,7 +76,7 @@ python3 web_server.py
 # 3. Acesse: http://localhost:8080
 ```
 
-## 💻 Uso
+## Uso
 
 ### 1. Coleta de Dados
 
@@ -172,42 +169,7 @@ generator.generate_html_report()
 generator.generate_json_report()
 ```
 
-## 📊 Funcionalidades Implementadas
-
-### ✅ Conceito C - Requisitos Básicos
-
-#### Coleta de Dados Básica
-- ✅ Captura de endereço IP
-- ✅ Captura de requisições HTTP (método, path, protocolo)
-- ✅ Captura de status de resposta
-- ✅ Suporte para formato Apache/Nginx Combined Log
-- ✅ Parse robusto com regex
-- ✅ Processamento de arquivos de log reais
-
-#### Pré-processamento de Dados Simples
-- ✅ Remoção de valores ausentes
-- ✅ Preenchimento de valores nulos
-- ✅ Remoção de duplicatas
-- ✅ Remoção de outliers (Z-score)
-- ✅ Geração de atributos relevantes:
-  - Tamanho da requisição (request_size)
-  - Comprimento do caminho (path_length)
-  - Profundidade do caminho (path_depth)
-  - Número de parâmetros (num_params)
-  - Comprimento dos parâmetros (params_length)
-  - Detecção de caracteres suspeitos (suspicious_chars)
-  - Categoria de status HTTP (status_category)
-
-#### Geração de Relatórios
-- ✅ Relatório resumido (console)
-- ✅ Relatório de segurança
-- ✅ Exportação em JSON
-- ✅ Exportação em HTML com visualização web
-- ✅ Estatísticas de requisições
-- ✅ Top IPs e paths mais acessados
-- ✅ Análise de padrões suspeitos
-
-## 🔍 Atributos Gerados
+## Atributos Gerados
 
 O sistema gera automaticamente os seguintes atributos para análise:
 
@@ -223,7 +185,7 @@ O sistema gera automaticamente os seguintes atributos para análise:
 | `num_params` | Quantidade de parâmetros |
 | `suspicious_chars` | Contagem de padrões suspeitos |
 
-## 📈 Padrões Suspeitos Detectados
+## Padrões Suspeitos Detectados
 
 O sistema identifica os seguintes padrões potencialmente maliciosos:
 
@@ -233,7 +195,7 @@ O sistema identifica os seguintes padrões potencialmente maliciosos:
 - `exec` - Command Injection
 - Encoding suspeito (`%`, `\x`)
 
-## 🧪 Testes
+## Testes
 
 ```bash
 # Gerar logs de exemplo para teste
@@ -256,7 +218,7 @@ python3 src/tests/test_preprocessor.py
 python3 demo.py
 ```
 
-## 📝 Formato de Log Suportado
+## Formato de Log Suportado
 
 O sistema suporta o formato Apache/Nginx Combined Log:
 
@@ -269,41 +231,8 @@ Exemplo:
 192.168.1.100 - - [28/Oct/2025:10:15:30 +0000] "GET /index.html HTTP/1.1" 200 1234
 ```
 
-## 🔒 Segurança
+## Segurança
 
 - Pipeline CI/CD com análise de segurança automática (Bandit)
 - Verificação de vulnerabilidades em dependências (Safety)
 - Workflow GitHub Actions para scans periódicos
-
-## 📚 Documentação
-
-Consulte a pasta `docs/` para:
-- Diagrama de arquitetura
-- Fluxogramas do sistema
-- Documentação técnica adicional
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto foi desenvolvido para fins educacionais.
-
-## 👨‍💻 Autor
-
-Desenvolvido para a disciplina de Tecnologia e Hackeamento - 7º Semestre
-
----
-
-**Status do Projeto:** ✅ Conceito C Implementado
-
-- [x] Coleta de dados básica
-- [x] Pré-processamento simples
-- [x] Remoção de valores ausentes
-- [x] Geração de atributos relevantes
-- [x] Geração de relatórios
