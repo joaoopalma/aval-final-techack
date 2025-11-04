@@ -1,5 +1,4 @@
 """
-Módulo para verificação de phishing (Opção 3)
 
 Fornece funções para checar uma URL contra blacklists locais, detectar
 características suspeitas, verificar redirects, cert SSL e (se disponível)

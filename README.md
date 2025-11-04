@@ -370,8 +370,6 @@ docker run -p 8080:8080 threat-detection-system
 ### 🔨 **1. Build da Imagem**
 
 ```bash
-# Navegar até o diretório do projeto
-cd aval-final-techack
 
 # Build da imagem Docker
 docker build -t threat-detection-system:latest .
