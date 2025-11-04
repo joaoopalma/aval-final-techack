@@ -105,6 +105,7 @@ def _domain_similarity(domain: str, brands: Optional[List[str]] = None) -> Dict[
 
 
 def _check_ssl_cert(domain: str, timeout: int = 5) -> Dict[str, Any]:
+    """Verifica certificado SSL com análise avançada"""
     info: Dict[str, Any] = {'available': False}
     host = domain.split(':')[0]
     try:
@@ -117,6 +118,62 @@ def _check_ssl_cert(domain: str, timeout: int = 5) -> Dict[str, Any]:
                 info['subject'] = cert.get('subject')
                 info['notBefore'] = cert.get('notBefore')
                 info['notAfter'] = cert.get('notAfter')
+                
+                # NOVO: Verificar coincidência domínio/certificado
+                subject_alt_names = []
+                common_name = None
+                
+                # Extrair Common Name (CN) do subject
+                if cert.get('subject'):
+                    for rdn in cert['subject']:
+                        for attr in rdn:
+                            if attr[0] == 'commonName':
+                                common_name = attr[1]
+                
+                # Extrair Subject Alternative Names (SANs)
+                if cert.get('subjectAltName'):
+                    subject_alt_names = [name[1] for name in cert['subjectAltName'] if name[0] == 'DNS']
+                
+                # Verificar se o domínio coincide
+                domain_matches = False
+                if common_name and (host == common_name or host.endswith('.' + common_name.lstrip('*.'))):
+                    domain_matches = True
+                for san in subject_alt_names:
+                    if host == san or host.endswith('.' + san.lstrip('*.')):
+                        domain_matches = True
+                        break
+                
+                info['common_name'] = common_name
+                info['subject_alt_names'] = subject_alt_names
+                info['domain_matches'] = domain_matches
+                
+                # NOVO: Detectar certificado auto-assinado
+                issuer_cn = None
+                if cert.get('issuer'):
+                    for rdn in cert['issuer']:
+                        for attr in rdn:
+                            if attr[0] == 'commonName':
+                                issuer_cn = attr[1]
+                
+                is_self_signed = (issuer_cn == common_name) if issuer_cn and common_name else False
+                info['is_self_signed'] = is_self_signed
+                
+                # NOVO: Verificar CA confiável (lista básica)
+                trusted_cas = [
+                    'Let\'s Encrypt', 'DigiCert', 'Comodo', 'GeoTrust', 
+                    'GlobalSign', 'Symantec', 'Thawte', 'VeriSign',
+                    'GoDaddy', 'Entrust', 'Sectigo', 'Amazon', 'Google'
+                ]
+                is_trusted_ca = False
+                if issuer_cn:
+                    for ca in trusted_cas:
+                        if ca.lower() in issuer_cn.lower():
+                            is_trusted_ca = True
+                            break
+                
+                info['is_trusted_ca'] = is_trusted_ca
+                info['issuer_cn'] = issuer_cn
+                
     except Exception as e:
         info['error'] = str(e)
 
@@ -136,7 +193,38 @@ def _whois_age(domain: str) -> Dict[str, Any]:
         return {'available': False, 'error': str(e)}
 
 
+def _check_dynamic_dns(domain: str) -> Dict[str, Any]:
+    """Verifica se o domínio usa serviços de DNS dinâmico (suspeito)"""
+    dynamic_dns_providers = [
+        'no-ip.com', 'no-ip.org', 'no-ip.biz', 'noip.com',
+        'dyndns.org', 'dyndns.com', 'dyn.com',
+        'afraid.org', 'freedns.afraid.org',
+        'ddns.net', 'duckdns.org', 'dynu.com',
+        'changeip.com', 'dns-dynamic.com',
+        'sytes.net', 'zapto.org', 'myftp.org',
+        'ddnsking.com', 'servebeer.com', 'servegame.com'
+    ]
+    
+    domain_lower = domain.lower().split(':')[0]  # Remove porta se houver
+    
+    is_dynamic = False
+    provider = None
+    
+    for ddns_provider in dynamic_dns_providers:
+        if ddns_provider in domain_lower:
+            is_dynamic = True
+            provider = ddns_provider
+            break
+    
+    return {
+        'is_dynamic_dns': is_dynamic,
+        'provider': provider,
+        'risk_level': 'high' if is_dynamic else 'none'
+    }
+
+
 def _check_redirects(url: str, timeout: int = 6) -> Dict[str, Any]:
+    """Verifica redirecionamentos com análise de comportamento suspeito"""
     if requests is None:
         return {'available': False, 'error': 'requests not installed'}
 
@@ -144,7 +232,50 @@ def _check_redirects(url: str, timeout: int = 6) -> Dict[str, Any]:
         r = requests.get(url, timeout=timeout, allow_redirects=True)
         history = [h.status_code for h in r.history]
         final = r.status_code
-        return {'available': True, 'history_status': history, 'final_status': final, 'final_url': r.url}
+        
+        # NOVO: Análise avançada de redirects
+        original_domain = _domain_from_url(url)
+        final_domain = _domain_from_url(r.url) if r.url else original_domain
+        
+        # Verificar mudança de domínio
+        domain_changed = (original_domain != final_domain)
+        
+        # Verificar múltiplos redirects (>3 é suspeito)
+        redirect_count = len(history)
+        too_many_redirects = redirect_count > 3
+        
+        # Rastrear todos os domínios na chain
+        redirect_chain_domains = []
+        if hasattr(r, 'history'):
+            for resp in r.history:
+                if resp.url:
+                    redirect_chain_domains.append(_domain_from_url(resp.url))
+        if r.url:
+            redirect_chain_domains.append(final_domain)
+        
+        # Verificar se algum domínio na chain é suspeito
+        suspicious_domains_in_chain = []
+        suspicious_indicators = ['.tk', '.ml', '.ga', '.cf', '.gq', 'bit.ly', 'tinyurl', 'shorturl']
+        for domain in redirect_chain_domains:
+            for indicator in suspicious_indicators:
+                if indicator in domain.lower():
+                    suspicious_domains_in_chain.append(domain)
+                    break
+        
+        return {
+            'available': True,
+            'history_status': history,
+            'final_status': final,
+            'final_url': r.url,
+            'redirect_count': redirect_count,
+            'domain_changed': domain_changed,
+            'original_domain': original_domain,
+            'final_domain': final_domain,
+            'too_many_redirects': too_many_redirects,
+            'redirect_chain_domains': redirect_chain_domains,
+            'suspicious_domains_in_chain': suspicious_domains_in_chain,
+            'is_suspicious': domain_changed or too_many_redirects or len(suspicious_domains_in_chain) > 0
+        }
     except Exception as e:
         return {'available': False, 'error': str(e)}
 
@@ -203,6 +334,9 @@ def check_url(url: str) -> Dict[str, Any]:
 
     # WHOIS
     result['whois'] = _whois_age(domain)
+    
+    # NOVO: DNS Dinâmico
+    result['dynamic_dns'] = _check_dynamic_dns(domain)
 
     # Redirects and final URL
     result['redirects'] = _check_redirects(url)
@@ -220,6 +354,23 @@ def check_url(url: str) -> Dict[str, Any]:
         # if forms have password fields
         if any(f.get('has_password') for f in result['content_analysis'].get('forms', [])):
             reasons.append('login_form')
+    
+    # NOVO: Verificar DNS dinâmico
+    if result['dynamic_dns'].get('is_dynamic_dns'):
+        reasons.append('dynamic_dns')
+    
+    # NOVO: Verificar SSL suspeito
+    if result['ssl'].get('available'):
+        if not result['ssl'].get('domain_matches'):
+            reasons.append('ssl_domain_mismatch')
+        if result['ssl'].get('is_self_signed'):
+            reasons.append('ssl_self_signed')
+        if not result['ssl'].get('is_trusted_ca'):
+            reasons.append('ssl_untrusted_ca')
+    
+    # NOVO: Verificar redirecionamentos suspeitos
+    if result['redirects'].get('is_suspicious'):
+        reasons.append('suspicious_redirects')
 
     result['reasons'] = reasons
 

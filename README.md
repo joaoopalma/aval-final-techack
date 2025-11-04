@@ -1,4 +1,4 @@
-# 🛡️ Sistema de Detecção de Ameaças Cibernéticas em Servidores Web
+#  Sistema de Detecção de Ameaças Cibernéticas em Servidores Web
 
 Sistema desenvolvido para identificar e classificar ameaças cibernéticas em servidores web através da análise de logs de acesso.
 
@@ -6,41 +6,41 @@ Sistema desenvolvido para identificar e classificar ameaças cibernéticas em se
 [![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 
-## 📋 Descrição
+##  Descrição
 
 Este projeto implementa um sistema completo de detecção de ameaças que:
 
-### 🔍 **1. Análise de Logs de Servidor**
-- ✅ Coleta logs detalhados de acesso ao servidor web (formato Apache/Nginx Combined)
-- ✅ Realiza pré-processamento e limpeza de dados
-- ✅ Identifica padrões potencialmente suspeitos (SQL Injection, XSS, Path Traversal, etc.)
-- ✅ Gera relatórios detalhados de segurança (HTML, JSON, CSV)
-- ✅ Interface web para upload de logs e visualização de relatórios
+###  **1. Análise de Logs de Servidor**
+-  Coleta logs detalhados de acesso ao servidor web (formato Apache/Nginx Combined)
+-  Realiza pré-processamento e limpeza de dados
+-  Identifica padrões potencialmente suspeitos (SQL Injection, XSS, Path Traversal, etc.)
+-  Gera relatórios detalhados de segurança (HTML, JSON, CSV)
+-  Interface web para upload de logs e visualização de relatórios
 
-### 🎣 **2. Verificação de URLs contra Phishing**
-- ✅ Verifica domínios em listas de phishing conhecidas (PhishTank, OpenPhish)
-- ✅ Detecta características suspeitas:
+###  **2. Verificação de URLs contra Phishing**
+-  Verifica domínios em listas de phishing conhecidas (PhishTank, OpenPhish)
+-  Detecta características suspeitas:
   - Presença de números em substituição a letras no domínio
   - Uso excessivo de subdomínios
   - Presença de caracteres especiais na URL
   - Similaridade com marcas conhecidas (PayPal, Google, Facebook, etc.)
-- ✅ Interface web simples com:
+-  Interface web simples com:
   - Campo de entrada para URLs
   - Resultados em formato de tabela
-  - **Indicador visual** 🟢 Verde/🔴 Vermelho para URLs seguras/maliciosas
-- ✅ Análise avançada:
+  - **Indicador visual**  Verde/ Vermelho para URLs seguras/maliciosas
+-  Análise avançada:
   - Certificado SSL (se HTTPS)
   - Redirects suspeitos
   - Formulários de login no conteúdo HTML
   - Histórico de verificações
 
-### 🐳 **3. Containerização**
-- ✅ Containerização completa com Docker
-- ✅ Pronto para deploy em produção
+###  **3. Containerização**
+-  Containerização completa com Docker
+-  Pronto para deploy em produção
 
 ---
 
-## 📁 Estrutura Completa do Projeto
+##  Estrutura Completa do Projeto
 
 ```
 aval-final-techack/
@@ -81,7 +81,7 @@ aval-final-techack/
 ├── logs/                          # Diretório para logs uploaded
 ├── reports/                       # Diretório para relatórios gerados
 │
-├── Dockerfile                     # 🐳 Containerização
+├── Dockerfile                     #  Containerização
 ├── requirements.txt               # Dependências gerais
 ├── .gitignore                    # Arquivos ignorados pelo Git
 └── README.md                      # Este arquivo
@@ -89,9 +89,9 @@ aval-final-techack/
 
 ---
 
-## 📄 Descrição Detalhada dos Arquivos
+##  Descrição Detalhada dos Arquivos
 
-### 🔍 `src/scanner.py`
+###  `src/scanner.py`
 **Módulo principal de coleta de logs**
 
 Responsável por:
@@ -112,7 +112,7 @@ class LogScanner:
 
 ---
 
-### 🧹 `src/utils/preprocessor.py`
+### `src/utils/preprocessor.py`
 **Módulo de pré-processamento e feature engineering**
 
 Responsável por:
@@ -151,7 +151,7 @@ class DataPreprocessor:
 
 ---
 
-### 📊 `src/report_generator.py`
+###  `src/report_generator.py`
 **Gerador de relatórios de segurança**
 
 Responsável por:
@@ -177,7 +177,7 @@ class ReportGenerator:
 
 ---
 
-### 🌐 `src/web_app.py`
+###  `src/web_app.py`
 **Aplicação web Flask para interface do usuário**
 
 Responsável por:
@@ -216,12 +216,12 @@ Responsável por:
 2. Sistema verifica em blacklists (PhishTank, OpenPhish)
 3. Analisa características suspeitas (subdomínios, caracteres, similaridade)
 4. Verifica SSL, redirects e conteúdo HTML
-5. Exibe resultado com **indicador visual** 🟢 Verde/🔴 Vermelho
+5. Exibe resultado com **indicador visual**  Verde/ Vermelho
 6. Salva no histórico (`data/phishing_checks.json`)
 
 ---
 
-### 🎣 `src/phishing/checker.py`
+###  `src/phishing/checker.py`
 **Módulo de verificação de URLs contra phishing**
 
 Responsável por:
@@ -257,14 +257,14 @@ _analyze_content_for_forms(url: str) -> Dict[str, Any]
 ```
 
 **Características detectadas:**
-- ✅ URL em blacklist (PhishTank, OpenPhish)
-- ✅ Números substituindo letras no domínio (g00gle, paypa1)
-- ✅ Subdomínios excessivos (conta >= 4)
-- ✅ Caracteres especiais suspeitos (`..`, `<script>`, `union`, `exec`, `%`, etc.)
-- ✅ Similaridade com marcas conhecidas (PayPal, Google, Facebook, Apple, Microsoft, Amazon, etc.)
-- ✅ Certificado SSL ausente ou inválido
-- ✅ Redirects suspeitos
-- ✅ Formulários solicitando senhas
+-  URL em blacklist (PhishTank, OpenPhish)
+-  Números substituindo letras no domínio (g00gle, paypa1)
+-  Subdomínios excessivos (conta >= 4)
+-  Caracteres especiais suspeitos (`..`, `<script>`, `union`, `exec`, `%`, etc.)
+-  Similaridade com marcas conhecidas (PayPal, Google, Facebook, Apple, Microsoft, Amazon, etc.)
+-  Certificado SSL ausente ou inválido
+-  Redirects suspeitos
+-  Formulários solicitando senhas
 
 **Resultado exemplo:**
 ```json
@@ -281,7 +281,7 @@ _analyze_content_for_forms(url: str) -> Dict[str, Any]
 
 ---
 
-### ✅ `src/tests/`
+###  `src/tests/`
 **Testes unitários**
 
 **test_scanner.py** - Testes do módulo scanner:
@@ -300,7 +300,7 @@ _analyze_content_for_forms(url: str) -> Dict[str, Any]
 
 ---
 
-### 🐳 `Dockerfile`
+###  `Dockerfile`
 **Containerização da aplicação**
 
 **Características:**
@@ -314,7 +314,7 @@ _analyze_content_for_forms(url: str) -> Dict[str, Any]
 
 ---
 
-### 🔒 `.github/workflows/security_scan.yml`
+###  `.github/workflows/security_scan.yml`
 **Pipeline CI/CD para análise de segurança**
 
 **Ferramentas configuradas:**
@@ -328,14 +328,14 @@ _analyze_content_for_forms(url: str) -> Dict[str, Any]
 
 ---
 
-## ⚙️ Instalação
+##  Instalação
 
 ### Requisitos
 - Python 3.11+
 - pip
 - Docker (opcional, para containerização)
 
-### 📥 Instalação Local
+### Instalação Local
 
 ```bash
 # Clone o repositório
@@ -346,7 +346,7 @@ cd aval-final-techack
 pip install -r src/requirements.txt
 ```
 
-### 🐳 Usando Docker (Recomendado)
+###  Usando Docker (Recomendado)
 
 ```bash
 # Build da imagem
@@ -363,11 +363,11 @@ docker run -p 8080:8080 threat-detection-system
 
 ## � **Runbook Docker - Guia Completo**
 
-### 📋 **Pré-requisitos**
+###  **Pré-requisitos**
 - Docker instalado (versão 20.10+)
 - Porta 8080 disponível
 
-### 🔨 **1. Build da Imagem**
+### **1. Build da Imagem**
 
 ```bash
 
@@ -385,7 +385,7 @@ threat-detection-system   latest    <image-id>   X seconds ago   XXX MB
 
 ---
 
-### ▶️ **2. Executar Container**
+###  **2. Executar Container**
 
 #### Modo Básico (Foreground)
 ```bash
@@ -413,7 +413,7 @@ docker run -d \
 
 ---
 
-### 🔍 **3. Verificar Status**
+###  **3. Verificar Status**
 
 ```bash
 # Listar containers em execução
@@ -431,7 +431,7 @@ docker stats threat-detector
 
 ---
 
-### 🌐 **4. Acessar a Aplicação**
+###  **4. Acessar a Aplicação**
 
 Abra seu navegador em:
 ```
@@ -439,12 +439,12 @@ http://localhost:8080
 ```
 
 Você verá a página inicial com duas opções:
-- 📊 **Análise de Logs**
-- 🎣 **Verificação de Phishing**
+-  **Análise de Logs**
+-  **Verificação de Phishing**
 
 ---
 
-### 🛑 **5. Parar e Remover Container**
+###  **5. Parar e Remover Container**
 
 ```bash
 # Parar container
@@ -459,7 +459,7 @@ docker rm -f threat-detector
 
 ---
 
-### 🧹 **6. Limpar Recursos**
+### **6. Limpar Recursos**
 
 ```bash
 # Remover imagem
@@ -477,7 +477,7 @@ docker system prune -a
 
 ---
 
-### 🔧 **7. Troubleshooting**
+###  **7. Troubleshooting**
 
 #### Porta 8080 já está em uso
 ```bash
@@ -512,7 +512,7 @@ exit
 
 ---
 
-### 📦 **8. Build Otimizado para Produção**
+### **8. Build Otimizado para Produção**
 
 ```bash
 # Build com cache otimizado
@@ -530,7 +530,7 @@ docker push seuusuario/threat-detection-system:v1.0.0
 
 ---
 
-### 🔄 **9. Docker Compose (Opcional)**
+###  **9. Docker Compose (Opcional)**
 
 Crie um arquivo `docker-compose.yml`:
 
@@ -569,7 +569,7 @@ docker-compose up -d --build
 
 ---
 
-### ✅ **10. Verificação Rápida de Funcionamento**
+###  **10. Verificação Rápida de Funcionamento**
 
 ```bash
 # Testar se o servidor está respondendo
@@ -588,9 +588,9 @@ curl -X POST \
 
 ---
 
-## �🚀 Uso
+## Uso
 
-### 1️⃣ Interface Web (Modo Recomendado)
+### 1. Interface Web (Modo Recomendado)
 
 **Iniciar servidor local:**
 ```bash
@@ -599,7 +599,7 @@ python3 src/web_app.py
 
 **Acesse:** http://localhost:8080
 
-#### 📊 **Análise de Logs:**
+####  **Análise de Logs:**
 1. Na página inicial, clique em **"Análise de Logs"**
 2. Clique em "Choose File" e selecione seu arquivo `.log`
 3. Clique em "Enviar e Processar"
@@ -611,13 +611,13 @@ python3 src/web_app.py
 - **Relatório JSON**: Dados estruturados
 - **CSV Processado**: Dados limpos para análise
 
-#### 🎣 **Verificação de Phishing:**
+####  **Verificação de Phishing:**
 1. Na página inicial, clique em **"Verificação de Phishing"**
 2. Digite a URL a ser verificada (ex: `http://suspicious-site.com`)
-3. Clique em "🔍 Verificar URL"
+3. Clique em " Verificar URL"
 4. Aguarde a análise (pode demorar alguns segundos)
 5. Visualize o resultado com:
-   - **Indicador visual** 🟢 Verde (segura) ou 🔴 Vermelho (suspeita/maliciosa)
+   - **Indicador visual**  Verde (segura) ou  Vermelho (suspeita/maliciosa)
    - Tabela de características detectadas
    - Score de suspeita
    - Verificação em blacklists
@@ -627,7 +627,7 @@ python3 src/web_app.py
 
 ---
 
-### 2️⃣ Uso Programático (Python)
+### 2. Uso Programático (Python)
 
 #### Análise de Logs
 
@@ -715,7 +715,7 @@ generator.print_console_report()
 generator.generate_html_report('threat_report.html')
 generator.generate_json_report('threat_report.json')
 
-print("✅ Pipeline de logs completo executado!")
+print(" Pipeline de logs completo executado!")
 ```
 
 #### Verificação de Phishing
@@ -737,7 +737,7 @@ print(f"Motivos: {result['reasons']}")
 
 # Verificar se é segura
 is_safe = not result['blacklisted'] and result['suspicious_score'] == 0
-print(f"\n{'✅ URL SEGURA' if is_safe else '⚠️ URL SUSPEITA/MALICIOSA'}")
+print(f"\n{' URL SEGURA' if is_safe else ' URL SUSPEITA/MALICIOSA'}")
 
 # Exibir JSON completo
 print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -751,12 +751,12 @@ Blacklisted: False
 Score Suspeito: 2
 Motivos: ['suspicious_patterns']
 
-⚠️ URL SUSPEITA/MALICIOSA
+ URL SUSPEITA/MALICIOSA
 ```
 
 ---
 
-## 🧪 Testes
+##  Testes
 
 ### Executar Todos os Testes
 
@@ -771,19 +771,19 @@ python3 src/tests/test_preprocessor.py
 ### Cobertura de Testes
 
 **test_scanner.py** (6 testes):
-- ✅ Inicialização do scanner
-- ✅ Parse de linha válida
-- ✅ Parse de linha inválida
-- ✅ Parse de URL com parâmetros
-- ✅ Coleta de logs de texto
-- ✅ Geração de estatísticas
+-  Inicialização do scanner
+-  Parse de linha válida
+-  Parse de linha inválida
+-  Parse de URL com parâmetros
+-  Coleta de logs de texto
+-  Geração de estatísticas
 
 **test_preprocessor.py** (5 testes):
-- ✅ Carregamento de dados
-- ✅ Remoção de duplicatas
-- ✅ Categorização de status HTTP
-- ✅ Detecção de caracteres suspeitos
-- ✅ Geração de features
+-  Carregamento de dados
+-  Remoção de duplicatas
+-  Categorização de status HTTP
+-  Detecção de caracteres suspeitos
+-  Geração de features
 
 **Resultado esperado:**
 ```
@@ -796,7 +796,7 @@ OK
 
 ---
 
-## 📊 Atributos Gerados (Features)
+##  Atributos Gerados (Features)
 
 | Atributo | Tipo | Descrição |
 |----------|------|-----------|
@@ -842,7 +842,7 @@ O sistema utiliza listas de phishing conhecidas para verificação de URLs:
 - Atualização recomendada: semanal
 - Fonte: https://www.phishtank.com/
 
-**⚠️ Nota:** As blacklists devem ser atualizadas regularmente para melhor proteção.
+** Nota:** As blacklists devem ser atualizadas regularmente para melhor proteção.
 
 **Atualizar manualmente:**
 ```bash
@@ -865,7 +865,7 @@ http://fake-paypal3.com
 
 ---
 
-## �📝 Formato de Log Suportado
+## � Formato de Log Suportado
 
 **Apache/Nginx Combined Log Format:**
 ```
@@ -890,14 +890,14 @@ IP - - [timestamp] "METHOD /path PROTOCOL" STATUS SIZE
 
 ## 🔐 Segurança
 
-- ✅ Pipeline CI/CD com análise de segurança automática (Bandit)
-- ✅ Verificação de vulnerabilidades em dependências (Safety)
-- ✅ Workflow GitHub Actions para scans periódicos
-- ✅ Containerização com Docker para isolamento
-- ✅ Validação de inputs e sanitização
-- ✅ Verificação de URLs contra blacklists de phishing
-- ✅ Análise de certificados SSL
-- ✅ Detecção de padrões maliciosos em URLs
+-  Pipeline CI/CD com análise de segurança automática (Bandit)
+-  Verificação de vulnerabilidades em dependências (Safety)
+-  Workflow GitHub Actions para scans periódicos
+-  Containerização com Docker para isolamento
+-  Validação de inputs e sanitização
+-  Verificação de URLs contra blacklists de phishing
+-  Análise de certificados SSL
+-  Detecção de padrões maliciosos em URLs
 
 ---
 
@@ -938,4 +938,4 @@ Este projeto foi desenvolvido como parte de uma avaliação acadêmica.
 
 ---
 
-**⭐ Se este projeto foi útil para você, considere dar uma estrela!**
+** Se este projeto foi útil para você, considere dar uma estrela!**
