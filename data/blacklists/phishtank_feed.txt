@@ -1,0 +1,16 @@
+# PhishTank Feed - URLs de Phishing Conhecidas
+# Este arquivo contém URLs maliciosas identificadas pela comunidade PhishTank
+# Atualização recomendada: diária
+# Fonte: https://www.phishtank.com/
+
+# Exemplos de padrões comuns de phishing:
+http://paypal-secure-login.com
+http://paypa1.com
+http://g00gle-login.com
+http://facebook-security-check.com
+http://apple-id-verification.com
+http://microsoft-account-update.com
+http://amazon-security-alert.com
+http://bank-of-america-verify.com
+http://wells-fargo-secure.com
+http://chase-bank-alert.com

@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar código fonte
 COPY src/ ./src/
 
+# Copiar dados de blacklist para verificação de phishing
+COPY data/ ./data/
+
 # Criar diretórios necessários
 RUN mkdir -p /app/logs /app/reports
 

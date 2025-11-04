@@ -50,6 +50,8 @@ htmlcov/
 *.html
 *.json
 !requirements.txt
+!data/blacklists/*.txt
+!data/blacklists/*.csv
 
 # Excluir placeholders
 *.placeholder

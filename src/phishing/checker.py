@@ -35,18 +35,30 @@ try:
 except Exception:
     whois_module = None  # type: ignore
 
-BLACKLIST_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'blacklists', 'openphish_feed.txt')
+# Blacklist paths
+BLACKLIST_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'blacklists')
+OPENPHISH_PATH = os.path.join(BLACKLIST_DIR, 'openphish_feed.txt')
+PHISHTANK_PATH = os.path.join(BLACKLIST_DIR, 'phishtank_feed.txt')
 HISTORY_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'phishing_checks.json')
 
 
 def _load_blacklist() -> List[str]:
-    if not os.path.exists(BLACKLIST_PATH):
-        return []
-
-    with open(BLACKLIST_PATH, 'r', encoding='utf-8') as f:
-        lines = [l.strip() for l in f if l.strip()]
-
-    return lines
+    """Carrega múltiplas blacklists (OpenPhish e PhishTank)"""
+    all_urls = []
+    
+    # Carregar OpenPhish
+    if os.path.exists(OPENPHISH_PATH):
+        with open(OPENPHISH_PATH, 'r', encoding='utf-8') as f:
+            lines = [l.strip() for l in f if l.strip() and not l.strip().startswith('#')]
+            all_urls.extend(lines)
+    
+    # Carregar PhishTank
+    if os.path.exists(PHISHTANK_PATH):
+        with open(PHISHTANK_PATH, 'r', encoding='utf-8') as f:
+            lines = [l.strip() for l in f if l.strip() and not l.strip().startswith('#')]
+            all_urls.extend(lines)
+    
+    return all_urls
 
 
 def _domain_from_url(url: str) -> str:
